@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { TAdress, TUser, TUserFullName } from "./user.interface";
 
+
 // User Name Schema for cleaner code. This Schema is used in <UserSchema>.
 const UserNameSchema = new Schema<TUserFullName>({
     firstName: {
