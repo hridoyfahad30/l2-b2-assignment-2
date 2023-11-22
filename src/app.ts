@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
-import { UsersRoute } from './app/User/user.route';
+import { UsersRouter } from './app/User/user.route';
 
 // Application
 const app: Application = express();
@@ -11,7 +11,7 @@ app.use(cors());
 
 
 // All client requests for <User> management.
-app.use('/api/users', UsersRoute)
+app.use('/api/users', UsersRouter)
 
 
 
