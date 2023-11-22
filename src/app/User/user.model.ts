@@ -37,9 +37,10 @@ const UserSchema = new Schema<TUser>({
         required: true,
         unique: true
     },
-    userName: {
+    username: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     }
     ,
     password: {
