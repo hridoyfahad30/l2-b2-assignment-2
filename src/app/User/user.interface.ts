@@ -1,18 +1,16 @@
+import { TOrder } from "../Orders/orders.interface";
+
+// User Full Name type, for cleaner code. This type is used in <TUser> type.
 export type TUserFullName = {
     firstName: string;
     lastName: string;
 };
 
+// Address type, for cleaner code. This type is used in <TUser> type.
 export type TAdress = {
     street: string;
     city: string;
     country: string;
-};
-
-export type TOrder = {
-    productName: string;
-    price: number;
-    quantity: number
 };
 
 export type TUser = {
@@ -26,4 +24,4 @@ export type TUser = {
     hobbies: string[];
     address: TAdress;
     orders: TOrder[]
-}
+};
