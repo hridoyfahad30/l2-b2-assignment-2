@@ -1,7 +1,7 @@
 export type TOrder = [
-    {
-        productName: string;
-        price: number;
-        quantity: number
-    }
-]
+  {
+    productName: string;
+    price: number;
+    quantity: number;
+  },
+];
