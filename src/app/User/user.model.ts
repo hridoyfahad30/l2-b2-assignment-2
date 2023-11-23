@@ -1,5 +1,7 @@
 import { Query, Schema, model } from 'mongoose';
 import { TAdress, TUser, TUserFullName } from './user.interface';
+import bcrypt from 'bcrypt';
+import config from '../config';
 
 // User Name Schema for cleaner code. This Schema is used in <UserSchema>.
 const UserNameSchema = new Schema<TUserFullName>({
@@ -10,8 +12,10 @@ const UserNameSchema = new Schema<TUserFullName>({
   lastName: {
     type: String,
     required: true,
-  },
-});
+  }
+},
+  { _id: false }
+);
 
 // Address Schema for cleaner code. This Schema is used in <UserSchema>.
 const AddressSchema = new Schema<TAdress>({
@@ -27,7 +31,8 @@ const AddressSchema = new Schema<TAdress>({
     type: String,
     required: true,
   },
-});
+},
+  { _id: false });
 
 // User Schema
 const UserSchema = new Schema<TUser>({
@@ -43,7 +48,7 @@ const UserSchema = new Schema<TUser>({
   },
   password: {
     type: String,
-    required: true,
+    required: true
   },
   fullName: {
     type: UserNameSchema,
@@ -72,9 +77,19 @@ const UserSchema = new Schema<TUser>({
   },
 });
 
+// User password in encrypted with bcrypt
+UserSchema.pre('save', async function (next) {
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_rounds)
+  )
+  next();
+});
+
 // When hit "/api/users" route for Find All Users client will get data with bellow filter
 UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
-  this.find({isActive: {$ne: false}}).projection({
+  this.find({ isActive: { $ne: false } }).projection({
+    _id: 0,
     username: 1,
     fullName: 1,
     age: 1,
@@ -86,7 +101,8 @@ UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
 
 // When hit "/api/users/:userId" route for Find A User client will get data with bellow filter
 UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
-  this.find({},{isActive: {$ne: false}}).projection({
+  this.find({}, { isActive: { $ne: false } }).projection({
+    _id: 0,
     userId: 1,
     username: 1,
     fullName: 1,
@@ -103,7 +119,8 @@ UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
 UserSchema.pre(
   /^findOneAndUpdate/,
   function (this: Query<TUser, Document>, next) {
-    this.find({isActive: {$ne: false}}).projection({
+    this.find({ isActive: { $ne: false } }).projection({
+      _id: 0,
       userId: 1,
       username: 1,
       fullName: 1,
@@ -120,7 +137,7 @@ UserSchema.pre(
 UserSchema.pre(
   /^updateOne/,
   function (this: Query<TUser, Document>, next) {
-    this.find({isActive: {$ne: false}});
+    this.find({ isActive: { $ne: false } });
     next();
   },
 );
