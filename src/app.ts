@@ -20,6 +20,7 @@ app.use('/api/users', UsersRouter);
 
 
 
+
 app.get('/', (req: Request, res: Response) => {
   res.send("The awesome server is running...");
 });
