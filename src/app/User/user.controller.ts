@@ -80,7 +80,7 @@ const updateUser = async (req: Request, res: Response) => {
             success: true,
             message: "User updated successfully!",
             data: result
-        })
+        });
 
     } catch (error) {
         res.status(404).json({

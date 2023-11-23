@@ -88,6 +88,12 @@ UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
     next();
   });
 
+// When hit "/api/users/:userId" route for Update User client will get data with bellow filter
+UserSchema.pre(/^findOneAndUpdate/, function (this: Query<TUser, Document>, next) {
+    this.find().projection({userId: 1, username: 1, fullName: 1, age: 1, email: 1, isActive: 1, hobbies: 1, address: 1 });
+    next();
+  });
+
 
 // Model
 export const UserModel = model<TUser>('User', UserSchema)

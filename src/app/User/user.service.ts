@@ -23,14 +23,12 @@ const getSingleUser = async (userId: number) : Promise<TUser | null> => {
 };
 
 // Update user service
-const updateUser = async ( userId : number, updateData : TUser) : Promise<TUser> => {
-    const result = await UserModel.updateOne(
-        {userId}, 
-        {$set: {
-            updateData
-        }});
-
-        return result;
+const updateUser = async ( userId : number, updateData : TUser) : Promise<TUser | null> => {
+    const result = await UserModel.findOneAndUpdate({userId}, {$set: updateData}, {new: true})
+    if(result === null){
+        throw Error()
+    }
+    return result;
 
 }
 
