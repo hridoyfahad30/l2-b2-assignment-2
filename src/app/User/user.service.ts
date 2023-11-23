@@ -39,10 +39,13 @@ const updateUser = async (
 };
 
 // Delete a user service
-const deleteUser = async (userId : number) => {
-    const result = await UserModel.updateOne({userId}, {$set: {isActive: false}});
-    return result;
-};
+const deleteUser = async (userId: number) => {
+  const result = await UserModel.findOneAndUpdate({userId}, {isActive: false}, {new: false});
+  if(result === null){
+    throw Error()
+  }
+  // return result
+  };
 
 // All exported Service
 export const UserService = {

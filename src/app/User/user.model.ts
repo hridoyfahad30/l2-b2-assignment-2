@@ -72,9 +72,9 @@ const UserSchema = new Schema<TUser>({
   },
 });
 
-// When hit "/api/users" route client will get data with bellow filter
+// When hit "/api/users" route for Find All Users client will get data with bellow filter
 UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
-  this.find().projection({
+  this.find({isActive: {$ne: false}}).projection({
     username: 1,
     fullName: 1,
     age: 1,
@@ -84,9 +84,9 @@ UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
   next();
 });
 
-// When hit "/api/users/:userId" route client will get data with bellow filter
+// When hit "/api/users/:userId" route for Find A User client will get data with bellow filter
 UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
-  this.find().projection({
+  this.find({},{isActive: {$ne: false}}).projection({
     userId: 1,
     username: 1,
     fullName: 1,
@@ -103,7 +103,7 @@ UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
 UserSchema.pre(
   /^findOneAndUpdate/,
   function (this: Query<TUser, Document>, next) {
-    this.find().projection({
+    this.find({isActive: {$ne: false}}).projection({
       userId: 1,
       username: 1,
       fullName: 1,
@@ -113,6 +113,14 @@ UserSchema.pre(
       hobbies: 1,
       address: 1,
     });
+    next();
+  },
+);
+
+UserSchema.pre(
+  /^updateOne/,
+  function (this: Query<TUser, Document>, next) {
+    this.find({isActive: {$ne: false}});
     next();
   },
 );
