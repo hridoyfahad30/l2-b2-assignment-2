@@ -23,7 +23,7 @@ const getSingleUser = async (userId: number) : Promise<TUser | null> => {
 };
 
 // Update user service
-const updateUser = async ( userId : number, updateData : TUser) => {
+const updateUser = async ( userId : number, updateData : TUser) : Promise<TUser> => {
     const result = await UserModel.updateOne(
         {userId}, 
         {$set: {
