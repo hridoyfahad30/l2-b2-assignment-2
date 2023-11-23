@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
 
+// Create User Controller
 const createUser = async (req: Request, res: Response) => {
 
     try {
@@ -8,21 +9,46 @@ const createUser = async (req: Request, res: Response) => {
 
         const result = await UserService.createUserIntoDB(userInfo);
         res.status(201).json({
-            "success": true,
-            "message": "User created successfully!",
-            "data": result
+            success: true,
+            message: "User created successfully!",
+            data: result
         })
 
     } catch (error) {
         res.status(501).json({
-            "success": false,
-            "message": "User not created",
-            "error": error
+            success: false,
+            message: "User not created",
+            error: error
         })
     }
 
 };
 
+// Get all users controller.
+const getAllUser = async (req: Request, res: Response) => {
+    try {
+        const result = await UserService.getAllUsers();
+        res.status(200).json({
+            success: true,
+            message: "Users fetched successfully!",
+            data: result
+        })
+
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "Users not found",
+            error: {
+                code: 404,
+                description: "Users not found!"
+            }
+        })
+    }
+}
+
+
+
 export const UserController = {
-    createUser
+    createUser,
+    getAllUser
 };
