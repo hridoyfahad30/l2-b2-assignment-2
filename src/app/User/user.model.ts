@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Query, Schema, model } from "mongoose";
 import { TAdress, TUser, TUserFullName } from "./user.interface";
 
 
@@ -75,6 +75,12 @@ const UserSchema = new Schema<TUser>({
     },
 });
 
+
+// When hit /api/users route client will get data with bellow filter
+UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
+    this.find().projection({username: 1, fullName: 1, age: 1, email: 1, address: 1 });
+    next();
+  });
 
 // Model
 export const UserModel = model<TUser>('User', UserSchema)
