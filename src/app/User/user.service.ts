@@ -20,6 +20,18 @@ const getSingleUser = async (userId: number) : Promise<TUser | null> => {
         throw Error('User not found.')
     }
     return result
+};
+
+// Update user service
+const updateUser = async ( userId : number, updateData : TUser) => {
+    const result = await UserModel.updateOne(
+        {userId}, 
+        {$set: {
+            updateData
+        }});
+
+        return result;
+
 }
 
 
@@ -28,5 +40,6 @@ const getSingleUser = async (userId: number) : Promise<TUser | null> => {
 export const UserService = {
     createUserIntoDB,
     getAllUsers,
-    getSingleUser
+    getSingleUser,
+    updateUser
 }
