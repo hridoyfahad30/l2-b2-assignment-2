@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
 
+
+
+
 // Create User Controller
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -110,12 +113,28 @@ const deleteUser = async (req: Request, res: Response) => {
 };
 
 // Add to orders Controller
-const addToOrders = async (req : Request, res: Response) => {
-  const userId = parseInt(req.params.userId);
-  const order = req.body;
-  
-  const result = await UserService.addToOrders(userId, order);
-  return result
+const addToOrders = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const order = req.body;
+
+    await UserService.addToOrders(userId, order);
+
+    res.status(200).json({
+      success: true,
+      message: "Order created successfully!",
+      data: null
+    })
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: "User not found",
+      error: {
+        code: 404,
+        description: "User not found !"
+      }
+    })
+  }
 };
 
 export const UserController = {
