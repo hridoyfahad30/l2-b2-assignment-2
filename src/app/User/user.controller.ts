@@ -109,12 +109,20 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-
+// Add to orders Controller
+const addToOrders = async (req : Request, res: Response) => {
+  const userId = parseInt(req.params.userId);
+  const order = req.body;
+  
+  const result = await UserService.addToOrders(userId, order);
+  return result
+};
 
 export const UserController = {
   createUser,
   getAllUser,
   getSingleUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  addToOrders
 };
