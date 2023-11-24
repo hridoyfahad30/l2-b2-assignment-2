@@ -93,14 +93,14 @@ const UserSchema = new mongoose_1.Schema({
         type: [OrderSchema]
     },
 });
-// User password is encrypted with bcrypt
+// User password is encrypted with bcrypt hash
 UserSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         this.password = yield bcrypt_1.default.hash(this.password, Number(config_1.default.bcrypt_salt_rounds));
         next();
     });
 });
-// When hit "/api/users" route for Find All Users client will get data with bellow filter
+// When hit "/api/users" route for Find All Users client will get data according bellow filter
 UserSchema.pre(/^find/, function (next) {
     this.find({ isActive: { $ne: false } }).projection({
         _id: 0,
@@ -113,7 +113,7 @@ UserSchema.pre(/^find/, function (next) {
     });
     next();
 });
-// When hit "/api/users/:userId" route for Find A User client will get data with bellow filter
+// When hit "/api/users/:userId" route for Find A User client will get data according bellow filter
 UserSchema.pre(/^findOne/, function (next) {
     this.find({}, { isActive: { $ne: false } }).projection({
         _id: 0,
@@ -128,7 +128,7 @@ UserSchema.pre(/^findOne/, function (next) {
     });
     next();
 });
-// When hit "/api/users/:userId" route for Update User client will get data with bellow filter
+// When hit "/api/users/:userId" route for Update User client will get data according bellow filter
 UserSchema.pre(/^findOneAndUpdate/, function (next) {
     this.find({ isActive: { $ne: false } }).projection({
         _id: 0,
@@ -147,5 +147,5 @@ UserSchema.pre(/^updateOne/, function (next) {
     this.find({ isActive: { $ne: false } });
     next();
 });
-// Model
+// User Model
 exports.UserModel = (0, mongoose_1.model)('User', UserSchema);

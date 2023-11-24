@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const user_service_1 = require("./user.service");
 const user_validation_1 = require("./user.validation");
-// Create User Controller
+// Create A User Controller
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userInfo = req.body;
@@ -32,7 +32,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-// Get all users controller.
+// Get all users Controller.
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_service_1.UserService.getAllUsers();
@@ -98,7 +98,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-// Delete user controller
+// Delete user Controller
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = parseInt(req.params.userId);
@@ -120,7 +120,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-// Add to orders Controller
+// Add new order in user data Controller
 const addToOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = parseInt(req.params.userId);
@@ -144,7 +144,7 @@ const addToOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 });
-// Get user order Controller
+// Get user orders Controller
 const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = parseInt(req.params.userId);
@@ -166,7 +166,7 @@ const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
 });
-// Get user order Controller
+// Calculate Total Price of Orders for a Specific User Controller
 const calculateUserTotalOrderPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = parseInt(req.params.userId);

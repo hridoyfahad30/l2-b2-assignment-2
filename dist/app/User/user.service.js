@@ -49,7 +49,7 @@ const getSingleUser = (userId) => __awaiter(void 0, void 0, void 0, function* ()
     }
     return result;
 });
-// Update user service
+// Update user Service
 const updateUser = (userId, updateData) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.findOneAndUpdate({ userId }, { $set: updateData }, { new: true });
     if (result === null) {
@@ -57,7 +57,7 @@ const updateUser = (userId, updateData) => __awaiter(void 0, void 0, void 0, fun
     }
     return result;
 });
-// Delete a user service
+// Delete a user Service
 const deleteUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.findOneAndUpdate({ userId }, { isActive: false }, { new: false });
     if (result === null) {
@@ -65,14 +65,14 @@ const deleteUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
-// Add new product in order service
+// Add new order in user data Service
 const addToOrders = (userId, order) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.updateOne({ userId }, { $addToSet: { orders: order } });
     if (!result.matchedCount || !result.modifiedCount) {
         throw Error();
     }
 });
-// Retrieve all orders for a specific user service
+// Retrieve all orders for a specific user Service
 const getUserOrders = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.aggregate([
         { $match: { userId: { $eq: userId } } },
@@ -98,7 +98,7 @@ const getUserOrders = (userId) => __awaiter(void 0, void 0, void 0, function* ()
     }
     return result;
 });
-// Calculate Total Price of Orders for a Specific User service
+// Calculate Total Price of Orders for a Specific User Service
 const calculateTotalPrice = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const userExist = yield user_model_1.UserModel.findOne({ userId });
     if (!userExist) {
