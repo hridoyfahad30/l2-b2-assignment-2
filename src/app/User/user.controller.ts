@@ -106,9 +106,10 @@ const deleteUser = async (req: Request, res: Response) => {
         description: "User not found"
       }
     })
-
   }
-}
+};
+
+
 
 export const UserController = {
   createUser,

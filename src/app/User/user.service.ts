@@ -1,3 +1,4 @@
+import { TOrder } from '../Orders/orders.interface';
 import { TUser } from './user.interface';
 import { UserModel } from './user.model';
 
@@ -44,8 +45,16 @@ const deleteUser = async (userId: number) => {
   if(result === null){
     throw Error()
   }
-  // return result
+  return result
   };
+
+// Add new product in order service
+const addToOrders = async (userId : number, order : [TOrder]) => {
+  const result = await UserModel.findByIdAndUpdate({userId}, {$setOnInsert: {orders: order}});
+  console.log("🚀 ~ file: user.service.ts:54 ~ addToOrders ~ result:", result)
+  
+
+}
 
 // All exported Service
 export const UserService = {
@@ -53,5 +62,6 @@ export const UserService = {
   getAllUsers,
   getSingleUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  addToOrders
 };
