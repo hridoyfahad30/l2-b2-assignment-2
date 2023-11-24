@@ -86,7 +86,7 @@ const UserSchema = new Schema<TUser>({
     required: true,
   },
   orders: {
-    type: [OrderSchema]
+    type: [OrderSchema],
   },
 });
 
@@ -109,7 +109,7 @@ UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
     age: 1,
     email: 1,
     address: 1,
-    orders: 1
+    orders: 1,
   });
   next();
 });
@@ -131,20 +131,22 @@ UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
 });
 
 // When hit "/api/users/:userId" route for Update User client will get data according bellow filter
-UserSchema.pre(/^findOneAndUpdate/, function (this: Query<TUser, Document>, next) {
-  this.find({ isActive: { $ne: false } }).projection({
-    _id: 0,
-    userId: 1,
-    username: 1,
-    fullName: 1,
-    age: 1,
-    email: 1,
-    isActive: 1,
-    hobbies: 1,
-    address: 1,
-  });
-  next();
-},
+UserSchema.pre(
+  /^findOneAndUpdate/,
+  function (this: Query<TUser, Document>, next) {
+    this.find({ isActive: { $ne: false } }).projection({
+      _id: 0,
+      userId: 1,
+      username: 1,
+      fullName: 1,
+      age: 1,
+      email: 1,
+      isActive: 1,
+      hobbies: 1,
+      address: 1,
+    });
+    next();
+  },
 );
 
 UserSchema.pre(/^updateOne/, function (this: Query<TUser, Document>, next) {

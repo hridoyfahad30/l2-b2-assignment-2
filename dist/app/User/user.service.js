@@ -16,12 +16,14 @@ const createUserIntoDB = (userInfo) => __awaiter(void 0, void 0, void 0, functio
     const { userId } = yield user_model_1.UserModel.create(userInfo);
     const result = yield user_model_1.UserModel.aggregate([
         { $match: { userId } },
-        { $project: {
+        {
+            $project: {
                 _id: 0,
                 password: 0,
                 orders: 0,
-                __v: 0
-            } }
+                __v: 0,
+            },
+        },
     ]);
     return result;
 });
@@ -36,8 +38,8 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
                 age: 1,
                 email: 1,
                 address: 1,
-            }
-        }
+            },
+        },
     ]);
     return result;
 });
@@ -81,17 +83,17 @@ const getUserOrders = (userId) => __awaiter(void 0, void 0, void 0, function* ()
                 _id: 0,
                 orders: {
                     $map: {
-                        input: "$orders",
-                        as: "order",
+                        input: '$orders',
+                        as: 'order',
                         in: {
-                            productName: "$$order.productName",
-                            price: "$$order.price",
-                            quantity: "$$order.quantity",
-                        }
-                    }
-                }
-            }
-        }
+                            productName: '$$order.productName',
+                            price: '$$order.price',
+                            quantity: '$$order.quantity',
+                        },
+                    },
+                },
+            },
+        },
     ]);
     if (result === null) {
         throw Error('User not found.');
@@ -106,22 +108,21 @@ const calculateTotalPrice = (userId) => __awaiter(void 0, void 0, void 0, functi
     }
     const result = yield user_model_1.UserModel.aggregate([
         { $match: { userId } },
-        { $unwind: "$orders" },
+        { $unwind: '$orders' },
         {
             $group: {
-                _id: "$orders.price",
-                totalPrice: { $sum: { $multiply: [
-                            '$orders.quantity',
-                            '$orders.price'
-                        ] } }
-            }
+                _id: '$orders.price',
+                totalPrice: {
+                    $sum: { $multiply: ['$orders.quantity', '$orders.price'] },
+                },
+            },
         },
         {
             $project: {
                 _id: 0,
-                totalPrice: 1
-            }
-        }
+                totalPrice: 1,
+            },
+        },
     ]);
     return result;
 });
@@ -134,5 +135,5 @@ exports.UserService = {
     deleteUser,
     addToOrders,
     getUserOrders,
-    calculateTotalPrice
+    calculateTotalPrice,
 };

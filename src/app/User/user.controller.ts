@@ -116,7 +116,7 @@ const addToOrders = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
     const order = req.body;
-    const zodParsedData = OrderValidationSchema.parse(order)
+    const zodParsedData = OrderValidationSchema.parse(order);
 
     await UserService.addToOrders(userId, zodParsedData);
 
@@ -141,7 +141,7 @@ const addToOrders = async (req: Request, res: Response) => {
 const getUserOrders = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
-    const result = await UserService.getUserOrders(userId)
+    const result = await UserService.getUserOrders(userId);
     res.status(200).json({
       success: true,
       message: 'User fetched successfully!',
@@ -163,10 +163,10 @@ const getUserOrders = async (req: Request, res: Response) => {
 const calculateUserTotalOrderPrice = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
-    const result = await UserService.calculateTotalPrice(userId)
+    const result = await UserService.calculateTotalPrice(userId);
     res.status(200).json({
       success: true,
-      message: "Total price calculated successfully!",
+      message: 'Total price calculated successfully!',
       data: result,
     });
   } catch (error) {
@@ -181,7 +181,6 @@ const calculateUserTotalOrderPrice = async (req: Request, res: Response) => {
   }
 };
 
-
 export const UserController = {
   createUser,
   getAllUser,
@@ -190,5 +189,5 @@ export const UserController = {
   deleteUser,
   addToOrders,
   getUserOrders,
-  calculateUserTotalOrderPrice
+  calculateUserTotalOrderPrice,
 };

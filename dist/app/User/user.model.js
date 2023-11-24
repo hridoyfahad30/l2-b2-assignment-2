@@ -90,7 +90,7 @@ const UserSchema = new mongoose_1.Schema({
         required: true,
     },
     orders: {
-        type: [OrderSchema]
+        type: [OrderSchema],
     },
 });
 // User password is encrypted with bcrypt hash
@@ -109,7 +109,7 @@ UserSchema.pre(/^find/, function (next) {
         age: 1,
         email: 1,
         address: 1,
-        orders: 1
+        orders: 1,
     });
     next();
 });

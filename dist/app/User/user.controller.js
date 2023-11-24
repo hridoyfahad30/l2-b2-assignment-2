@@ -173,7 +173,7 @@ const calculateUserTotalOrderPrice = (req, res) => __awaiter(void 0, void 0, voi
         const result = yield user_service_1.UserService.calculateTotalPrice(userId);
         res.status(200).json({
             success: true,
-            message: "Total price calculated successfully!",
+            message: 'Total price calculated successfully!',
             data: result,
         });
     }
@@ -196,5 +196,5 @@ exports.UserController = {
     deleteUser,
     addToOrders,
     getUserOrders,
-    calculateUserTotalOrderPrice
+    calculateUserTotalOrderPrice,
 };

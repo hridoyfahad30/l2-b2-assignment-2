@@ -3,15 +3,17 @@ import { UserModel } from './user.model';
 
 // Create a User into DB Service
 const createUserIntoDB = async (userInfo: TUser) => {
-  const {userId} = await UserModel.create(userInfo);
+  const { userId } = await UserModel.create(userInfo);
   const result = await UserModel.aggregate([
-    {$match: {userId}},
-    {$project: {
-      _id: 0,
-      password: 0,
-      orders: 0,
-      __v:0      
-    }}
+    { $match: { userId } },
+    {
+      $project: {
+        _id: 0,
+        password: 0,
+        orders: 0,
+        __v: 0,
+      },
+    },
   ]);
   return result;
 };
@@ -27,8 +29,8 @@ const getAllUsers = async () => {
         age: 1,
         email: 1,
         address: 1,
-      }
-    }
+      },
+    },
   ]);
   return result;
 };
@@ -91,17 +93,17 @@ const getUserOrders = async (userId: number) => {
         _id: 0,
         orders: {
           $map: {
-            input: "$orders",
-            as: "order",
+            input: '$orders',
+            as: 'order',
             in: {
-              productName: "$$order.productName",
-              price: "$$order.price",
-              quantity: "$$order.quantity",
-            }
-          }
-        }
-      }
-    }
+              productName: '$$order.productName',
+              price: '$$order.price',
+              quantity: '$$order.quantity',
+            },
+          },
+        },
+      },
+    },
   ]);
   if (result === null) {
     throw Error('User not found.');
@@ -117,22 +119,21 @@ const calculateTotalPrice = async (userId: number) => {
   }
   const result = await UserModel.aggregate([
     { $match: { userId } },
-    { $unwind: "$orders" },
+    { $unwind: '$orders' },
     {
       $group: {
-        _id: "$orders.price",
-        totalPrice: { $sum: {$multiply: [
-          '$orders.quantity',
-          '$orders.price'
-        ]} }
-      }
+        _id: '$orders.price',
+        totalPrice: {
+          $sum: { $multiply: ['$orders.quantity', '$orders.price'] },
+        },
+      },
     },
     {
       $project: {
         _id: 0,
-        totalPrice: 1
-      }
-    }
+        totalPrice: 1,
+      },
+    },
   ]);
   return result;
 };
@@ -146,5 +147,5 @@ export const UserService = {
   deleteUser,
   addToOrders,
   getUserOrders,
-  calculateTotalPrice
+  calculateTotalPrice,
 };
