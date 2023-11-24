@@ -1,5 +1,4 @@
-import { TOrder } from '../Orders/orders.interface';
-import { TUser } from './user.interface';
+import { TOrder, TUser } from './user.interface';
 import { UserModel } from './user.model';
 
 // Create a User into DB Service
@@ -49,11 +48,12 @@ const deleteUser = async (userId: number) => {
   };
 
 // Add new product in order service
-const addToOrders = async (userId : number, order : [TOrder]) => {
-  const result = await UserModel.findByIdAndUpdate({userId}, {$setOnInsert: {orders: order}});
-  console.log("🚀 ~ file: user.service.ts:54 ~ addToOrders ~ result:", result)
-  
-
+const addToOrders = async (userId : number, order : TOrder) => {
+  const result = await UserModel.updateOne({userId}, {$addToSet: {orders:order}});
+  console.log("🚀 ~ file: user.service.ts:53 ~ addToOrders ~ result:", result)
+  if(!result.matchedCount || !result.modifiedCount){
+    throw Error()
+  }
 }
 
 // All exported Service

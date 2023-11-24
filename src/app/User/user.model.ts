@@ -1,5 +1,5 @@
 import { Query, Schema, model } from 'mongoose';
-import { TAdress, TUser, TUserFullName } from './user.interface';
+import { TAdress, TOrder, TUser, TUserFullName } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../config';
 
@@ -33,6 +33,13 @@ const AddressSchema = new Schema<TAdress>({
   },
 },
   { _id: false });
+
+// Order Schema
+const OrderSchema = new Schema<TOrder>({
+  productName: {type: String},
+  price: {type: Number},
+  quantity: {type: Number}
+})
 
 // User Schema
 const UserSchema = new Schema<TUser>({
@@ -75,6 +82,9 @@ const UserSchema = new Schema<TUser>({
     type: AddressSchema,
     required: true,
   },
+  orders: {
+    type: [OrderSchema]
+  }
 });
 
 // User password is encrypted with bcrypt
@@ -82,7 +92,7 @@ UserSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(
     this.password,
     Number(config.bcrypt_salt_rounds)
-  )
+  );
   next();
 });
 
@@ -92,8 +102,9 @@ UserSchema.methods.toJSON = function() {
   delete obj.password;
   delete obj._id;
   delete obj.__v;
+  delete obj.orders;
   return obj;
-}
+};
 
 // When hit "/api/users" route for Find All Users client will get data with bellow filter
 UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
@@ -153,3 +164,4 @@ UserSchema.pre(
 
 // Model
 export const UserModel = model<TUser>('User', UserSchema);
+

@@ -1,5 +1,3 @@
-import { TOrder } from '../Orders/orders.interface';
-
 // User Full Name type, for cleaner code. This type is used in <TUser> type.
 export type TUserFullName = {
   firstName: string;
@@ -12,6 +10,14 @@ export type TAdress = {
   city: string;
   country: string;
 };
+
+// Order type
+export type TOrder = {
+  productName: string;
+  price: number;
+  quantity: number;
+}
+  ;
 
 export type TUser = {
   userId: number;
