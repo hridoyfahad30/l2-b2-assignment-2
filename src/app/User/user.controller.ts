@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
+import { UserValidationSchema } from './user.validation';
 
 // Create User Controller
 const createUser = async (req: Request, res: Response) => {
   try {
     const userInfo = req.body;
+    const zodParsedUserInfo = UserValidationSchema.parse(userInfo);
 
-    const result = await UserService.createUserIntoDB(userInfo);
+    const result = await UserService.createUserIntoDB(zodParsedUserInfo);
     res.status(201).json({
       success: true,
       message: 'User created successfully!',
