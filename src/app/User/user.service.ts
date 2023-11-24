@@ -64,7 +64,10 @@ const addToOrders = async (userId: number, order: TOrder) => {
 
 // Retrieve all orders for a specific user service
 const getUserOrders = async (userId: number) => {
-  const result = await UserModel.findOne({ userId });
+  const result = await UserModel.aggregate([
+    { $match: { userId: { $eq: userId }}},
+    {$project: {orders: 1}}
+  ])
   console.log("🚀 ~ file: user.service.ts:68 ~ getUserOrders ~ result:", result)
   if (result === null) {
     throw Error('User not found.');
