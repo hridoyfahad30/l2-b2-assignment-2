@@ -2,14 +2,34 @@ import { TOrder, TUser } from './user.interface';
 import { UserModel } from './user.model';
 
 // Create a User into DB Service
-const createUserIntoDB = async (userInfo: TUser): Promise<TUser> => {
-  const result = await UserModel.create(userInfo);
+const createUserIntoDB = async (userInfo: TUser) => {
+  const {userId} = await UserModel.create(userInfo);
+  const result = await UserModel.aggregate([
+    {$match: {userId}},
+    {$project: {
+      _id: 0,
+      password: 0,
+      orders: 0,
+      __v:0      
+    }}
+  ])
   return result;
 };
 
 // Get all Users from DB Service
-const getAllUsers = async (): Promise<TUser[]> => {
-  const result = await UserModel.find();
+const getAllUsers = async () => {
+  const result = UserModel.aggregate([
+    {
+      $project: {
+        _id: 0,
+        username: 1,
+        fullName: 1,
+        age: 1,
+        email: 1,
+        address: 1,
+      }
+    }
+  ])
   return result;
 };
 
@@ -101,7 +121,10 @@ const calculateTotalPrice = async (userId: number) => {
     {
       $group: {
         _id: "$orders.price",
-        totalPrice: { $sum: "$orders.price" }
+        totalPrice: { $sum: {$multiply: [
+          '$orders.quantity',
+          '$orders.price'
+        ]} }
       }
     },
     {

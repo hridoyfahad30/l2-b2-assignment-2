@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
-import { UserValidationSchema } from './user.validation';
+import { OrderValidationSchema, UserValidationSchema } from './user.validation';
 
 // Create User Controller
 const createUser = async (req: Request, res: Response) => {
@@ -116,8 +116,9 @@ const addToOrders = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
     const order = req.body;
+    const zodParsedData = OrderValidationSchema.parse(order)
 
-    await UserService.addToOrders(userId, order);
+    await UserService.addToOrders(userId, zodParsedData);
 
     res.status(200).json({
       success: true,

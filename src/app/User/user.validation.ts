@@ -12,11 +12,11 @@ const AddressValidationSchema = z.object({
   country: z.string({ required_error: 'Country is required' }),
 });
 
-export const OrderValidationSchema = z.array(z.object({
+export const OrderValidationSchema = z.object({
   productName: z.string(),
   price: z.number(),
   quantity: z.number(),
-}));
+});
 
 // Define the main user schema
 export const UserValidationSchema = z.object({

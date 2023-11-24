@@ -86,7 +86,7 @@ const UserSchema = new Schema<TUser>({
     required: true,
   },
   orders: {
-    type: [OrderSchema],
+    type: [OrderSchema]
   },
 });
 
@@ -96,18 +96,9 @@ UserSchema.pre('save', async function (next) {
     this.password,
     Number(config.bcrypt_salt_rounds),
   );
+
   next();
 });
-
-// toJSON method use for projection Password, _id, __v as response after create user
-UserSchema.methods.toJSON = function () {
-  const obj = this.toObject();
-  delete obj.password;
-  delete obj._id;
-  delete obj.__v;
-  delete obj.orders;
-  return obj;
-};
 
 // When hit "/api/users" route for Find All Users client will get data with bellow filter
 UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
@@ -118,6 +109,7 @@ UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
     age: 1,
     email: 1,
     address: 1,
+    orders: 1
   });
   next();
 });
