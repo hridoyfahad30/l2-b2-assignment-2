@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
 
-
-
-
 // Create User Controller
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -97,18 +94,18 @@ const deleteUser = async (req: Request, res: Response) => {
     await UserService.deleteUser(userId);
     res.status(200).json({
       success: true,
-      message: "User deleted successfully",
-      data: null
-    })
+      message: 'User deleted successfully',
+      data: null,
+    });
   } catch (error) {
     res.status(404).json({
       success: false,
-      message: "User not found",
+      message: 'User not found',
       error: {
         code: 404,
-        description: "User not found"
-      }
-    })
+        description: 'User not found',
+      },
+    });
   }
 };
 
@@ -122,18 +119,18 @@ const addToOrders = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: "Order created successfully!",
-      data: null
-    })
+      message: 'Order created successfully!',
+      data: null,
+    });
   } catch (error) {
     res.status(404).json({
       success: false,
-      message: "User not found",
+      message: 'User not found',
       error: {
         code: 404,
-        description: "User not found !"
-      }
-    })
+        description: 'User not found !',
+      },
+    });
   }
 };
 
@@ -143,5 +140,5 @@ export const UserController = {
   getSingleUser,
   updateUser,
   deleteUser,
-  addToOrders
+  addToOrders,
 };

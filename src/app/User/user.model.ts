@@ -4,42 +4,45 @@ import bcrypt from 'bcrypt';
 import config from '../config';
 
 // User Name Schema for cleaner code. This Schema is used in <UserSchema>.
-const UserNameSchema = new Schema<TUserFullName>({
-  firstName: {
-    type: String,
-    required: true,
+const UserNameSchema = new Schema<TUserFullName>(
+  {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
   },
-  lastName: {
-    type: String,
-    required: true,
-  }
-},
-  { _id: false }
+  { _id: false },
 );
 
 // Address Schema for cleaner code. This Schema is used in <UserSchema>.
-const AddressSchema = new Schema<TAdress>({
-  street: {
-    type: String,
-    required: true,
+const AddressSchema = new Schema<TAdress>(
+  {
+    street: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
   },
-  city: {
-    type: String,
-    required: true,
-  },
-  country: {
-    type: String,
-    required: true,
-  },
-},
-  { _id: false });
+  { _id: false },
+);
 
 // Order Schema
 const OrderSchema = new Schema<TOrder>({
-  productName: {type: String},
-  price: {type: Number},
-  quantity: {type: Number}
-})
+  productName: { type: String },
+  price: { type: Number },
+  quantity: { type: Number },
+});
 
 // User Schema
 const UserSchema = new Schema<TUser>({
@@ -55,7 +58,7 @@ const UserSchema = new Schema<TUser>({
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   fullName: {
     type: UserNameSchema,
@@ -83,21 +86,21 @@ const UserSchema = new Schema<TUser>({
     required: true,
   },
   orders: {
-    type: [OrderSchema]
-  }
+    type: [OrderSchema],
+  },
 });
 
 // User password is encrypted with bcrypt
 UserSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(
     this.password,
-    Number(config.bcrypt_salt_rounds)
+    Number(config.bcrypt_salt_rounds),
   );
   next();
 });
 
 // toJSON method use for projection Password, _id, __v as response after create user
-UserSchema.methods.toJSON = function() {
+UserSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
   delete obj._id;
@@ -154,14 +157,10 @@ UserSchema.pre(
   },
 );
 
-UserSchema.pre(
-  /^updateOne/,
-  function (this: Query<TUser, Document>, next) {
-    this.find({ isActive: { $ne: false } });
-    next();
-  },
-);
+UserSchema.pre(/^updateOne/, function (this: Query<TUser, Document>, next) {
+  this.find({ isActive: { $ne: false } });
+  next();
+});
 
 // Model
 export const UserModel = model<TUser>('User', UserSchema);
-

@@ -40,21 +40,37 @@ const updateUser = async (
 
 // Delete a user service
 const deleteUser = async (userId: number) => {
-  const result = await UserModel.findOneAndUpdate({userId}, {isActive: false}, {new: false});
-  if(result === null){
-    throw Error()
+  const result = await UserModel.findOneAndUpdate(
+    { userId },
+    { isActive: false },
+    { new: false },
+  );
+  if (result === null) {
+    throw Error();
   }
-  return result
-  };
+  return result;
+};
 
 // Add new product in order service
-const addToOrders = async (userId : number, order : TOrder) => {
-  const result = await UserModel.updateOne({userId}, {$addToSet: {orders:order}});
-  console.log("🚀 ~ file: user.service.ts:53 ~ addToOrders ~ result:", result)
-  if(!result.matchedCount || !result.modifiedCount){
-    throw Error()
+const addToOrders = async (userId: number, order: TOrder) => {
+  const result = await UserModel.updateOne(
+    { userId },
+    { $addToSet: { orders: order } },
+  );
+  if (!result.matchedCount || !result.modifiedCount) {
+    throw Error();
   }
-}
+};
+
+// Retrieve all orders for a specific user service
+const getUserOrders = async (userId: number) => {
+  const result = await UserModel.findOne({ userId });
+  console.log("🚀 ~ file: user.service.ts:68 ~ getUserOrders ~ result:", result)
+  if (result === null) {
+    throw Error('User not found.');
+  }
+  return result;
+};
 
 // All exported Service
 export const UserService = {
@@ -63,5 +79,6 @@ export const UserService = {
   getSingleUser,
   updateUser,
   deleteUser,
-  addToOrders
+  addToOrders,
+  getUserOrders
 };
