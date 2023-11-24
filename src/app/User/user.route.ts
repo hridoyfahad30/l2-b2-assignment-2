@@ -9,4 +9,5 @@ UsersRouter.post('/', UserController.createUser);
 UsersRouter.delete('/:userId', UserController.deleteUser);
 UsersRouter.get('/:userId', UserController.getSingleUser);
 UsersRouter.get('/:userId/orders', UserController.getUserOrders);
+UsersRouter.get('/:userId/orders/total-price', UserController.calculateUserTotalOrderPrice);
 UsersRouter.get('/', UserController.getAllUser);
