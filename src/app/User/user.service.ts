@@ -12,7 +12,7 @@ const createUserIntoDB = async (userInfo: TUser) => {
       orders: 0,
       __v:0      
     }}
-  ])
+  ]);
   return result;
 };
 
@@ -29,7 +29,7 @@ const getAllUsers = async () => {
         address: 1,
       }
     }
-  ])
+  ]);
   return result;
 };
 
@@ -42,7 +42,7 @@ const getSingleUser = async (userId: number): Promise<TUser | null> => {
   return result;
 };
 
-// Update user service
+// Update user Service
 const updateUser = async (
   userId: number,
   updateData: TUser,
@@ -58,7 +58,7 @@ const updateUser = async (
   return result;
 };
 
-// Delete a user service
+// Delete a user Service
 const deleteUser = async (userId: number) => {
   const result = await UserModel.findOneAndUpdate(
     { userId },
@@ -71,7 +71,7 @@ const deleteUser = async (userId: number) => {
   return result;
 };
 
-// Add new product in order service
+// Add new order in user data Service
 const addToOrders = async (userId: number, order: TOrder) => {
   const result = await UserModel.updateOne(
     { userId },
@@ -82,7 +82,7 @@ const addToOrders = async (userId: number, order: TOrder) => {
   }
 };
 
-// Retrieve all orders for a specific user service
+// Retrieve all orders for a specific user Service
 const getUserOrders = async (userId: number) => {
   const result = await UserModel.aggregate([
     { $match: { userId: { $eq: userId } } },
@@ -102,18 +102,18 @@ const getUserOrders = async (userId: number) => {
         }
       }
     }
-  ])
+  ]);
   if (result === null) {
     throw Error('User not found.');
   }
   return result;
 };
 
-// Calculate Total Price of Orders for a Specific User service
+// Calculate Total Price of Orders for a Specific User Service
 const calculateTotalPrice = async (userId: number) => {
   const userExist = await UserModel.findOne({ userId });
   if (!userExist) {
-    throw Error()
+    throw Error();
   }
   const result = await UserModel.aggregate([
     { $match: { userId } },
@@ -133,9 +133,9 @@ const calculateTotalPrice = async (userId: number) => {
         totalPrice: 1
       }
     }
-  ])
-  return result
-}
+  ]);
+  return result;
+};
 
 // All exported Service
 export const UserService = {

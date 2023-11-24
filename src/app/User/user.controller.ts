@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { UserService } from './user.service';
 import { OrderValidationSchema, UserValidationSchema } from './user.validation';
 
-// Create User Controller
+// Create A User Controller
 const createUser = async (req: Request, res: Response) => {
   try {
     const userInfo = req.body;
@@ -23,7 +23,7 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
-// Get all users controller.
+// Get all users Controller.
 const getAllUser = async (req: Request, res: Response) => {
   try {
     const result = await UserService.getAllUsers();
@@ -89,7 +89,7 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-// Delete user controller
+// Delete user Controller
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -111,7 +111,7 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-// Add to orders Controller
+// Add new order in user data Controller
 const addToOrders = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -137,7 +137,7 @@ const addToOrders = async (req: Request, res: Response) => {
   }
 };
 
-// Get user order Controller
+// Get user orders Controller
 const getUserOrders = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -159,7 +159,7 @@ const getUserOrders = async (req: Request, res: Response) => {
   }
 };
 
-// Get user order Controller
+// Calculate Total Price of Orders for a Specific User Controller
 const calculateUserTotalOrderPrice = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);

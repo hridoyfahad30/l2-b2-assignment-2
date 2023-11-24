@@ -90,7 +90,7 @@ const UserSchema = new Schema<TUser>({
   },
 });
 
-// User password is encrypted with bcrypt
+// User password is encrypted with bcrypt hash
 UserSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(
     this.password,
@@ -100,7 +100,7 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-// When hit "/api/users" route for Find All Users client will get data with bellow filter
+// When hit "/api/users" route for Find All Users client will get data according bellow filter
 UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
   this.find({ isActive: { $ne: false } }).projection({
     _id: 0,
@@ -114,7 +114,7 @@ UserSchema.pre(/^find/, function (this: Query<TUser, Document>, next) {
   next();
 });
 
-// When hit "/api/users/:userId" route for Find A User client will get data with bellow filter
+// When hit "/api/users/:userId" route for Find A User client will get data according bellow filter
 UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
   this.find({}, { isActive: { $ne: false } }).projection({
     _id: 0,
@@ -130,23 +130,21 @@ UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
   next();
 });
 
-// When hit "/api/users/:userId" route for Update User client will get data with bellow filter
-UserSchema.pre(
-  /^findOneAndUpdate/,
-  function (this: Query<TUser, Document>, next) {
-    this.find({ isActive: { $ne: false } }).projection({
-      _id: 0,
-      userId: 1,
-      username: 1,
-      fullName: 1,
-      age: 1,
-      email: 1,
-      isActive: 1,
-      hobbies: 1,
-      address: 1,
-    });
-    next();
-  },
+// When hit "/api/users/:userId" route for Update User client will get data according bellow filter
+UserSchema.pre(/^findOneAndUpdate/, function (this: Query<TUser, Document>, next) {
+  this.find({ isActive: { $ne: false } }).projection({
+    _id: 0,
+    userId: 1,
+    username: 1,
+    fullName: 1,
+    age: 1,
+    email: 1,
+    isActive: 1,
+    hobbies: 1,
+    address: 1,
+  });
+  next();
+},
 );
 
 UserSchema.pre(/^updateOne/, function (this: Query<TUser, Document>, next) {
@@ -154,5 +152,5 @@ UserSchema.pre(/^updateOne/, function (this: Query<TUser, Document>, next) {
   next();
 });
 
-// Model
+// User Model
 export const UserModel = model<TUser>('User', UserSchema);
