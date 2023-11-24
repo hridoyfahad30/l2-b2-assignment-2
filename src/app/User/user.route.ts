@@ -8,4 +8,5 @@ UsersRouter.put('/:userId/orders', UserController.addToOrders);
 UsersRouter.post('/', UserController.createUser);
 UsersRouter.delete('/:userId', UserController.deleteUser);
 UsersRouter.get('/:userId', UserController.getSingleUser);
+UsersRouter.get('/:userId/orders', UserController.getUserOrders);
 UsersRouter.get('/', UserController.getAllUser);

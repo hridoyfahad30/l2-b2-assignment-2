@@ -65,10 +65,24 @@ const addToOrders = async (userId: number, order: TOrder) => {
 // Retrieve all orders for a specific user service
 const getUserOrders = async (userId: number) => {
   const result = await UserModel.aggregate([
-    { $match: { userId: { $eq: userId }}},
-    {$project: {orders: 1}}
+    { $match: { userId: { $eq: userId } } },
+    {
+      $project: {
+        _id: 0,
+        orders: {
+          $map: {
+            input: "$orders",
+            as: "order",
+            in: {
+              productName: "$$order.productName",
+              price: "$$order.price",
+              quantity: "$$order.quantity",
+            }
+          }
+        }
+      }
+    }
   ])
-  console.log("🚀 ~ file: user.service.ts:68 ~ getUserOrders ~ result:", result)
   if (result === null) {
     throw Error('User not found.');
   }
