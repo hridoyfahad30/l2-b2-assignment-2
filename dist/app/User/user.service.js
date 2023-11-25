@@ -15,7 +15,9 @@ const user_model_1 = require("./user.model");
 const createUserIntoDB = (userInfo) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = yield user_model_1.UserModel.create(userInfo);
     const result = yield user_model_1.UserModel.aggregate([
+        // Stage 1: Match with specific userId
         { $match: { userId } },
+        // Stage 2: Projected for which fields are exclude in response
         {
             $project: {
                 _id: 0,
@@ -30,6 +32,9 @@ const createUserIntoDB = (userInfo) => __awaiter(void 0, void 0, void 0, functio
 // Get all Users from DB Service
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = user_model_1.UserModel.aggregate([
+        // Stage 1: Match the user who is active currently
+        { $match: { isActive: { $ne: false } } },
+        // Stage 2: Projected for which fields are include and exclude in response
         {
             $project: {
                 _id: 0,
@@ -39,8 +44,11 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
                 email: 1,
                 address: 1,
             },
-        },
+        }
     ]);
+    if ((yield result).length === 0) {
+        throw Error();
+    }
     return result;
 });
 // Get Single user from DB Service
@@ -53,7 +61,7 @@ const getSingleUser = (userId) => __awaiter(void 0, void 0, void 0, function* ()
 });
 // Update user Service
 const updateUser = (userId, updateData) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.UserModel.findOneAndUpdate({ userId }, { $set: updateData }, { new: true });
+    const result = yield user_model_1.UserModel.findOneAndUpdate({ userId }, updateData, { new: true });
     if (result === null) {
         throw Error();
     }
@@ -77,7 +85,10 @@ const addToOrders = (userId, order) => __awaiter(void 0, void 0, void 0, functio
 // Retrieve all orders for a specific user Service
 const getUserOrders = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.aggregate([
-        { $match: { userId: { $eq: userId } } },
+        { $match: { $and: [
+                    { isActive: { $ne: false } },
+                    { userId: { $eq: userId } }
+                ] } },
         {
             $project: {
                 _id: 0,
@@ -95,7 +106,7 @@ const getUserOrders = (userId) => __awaiter(void 0, void 0, void 0, function* ()
             },
         },
     ]);
-    if (result === null) {
+    if (result === null || result.length === 0) {
         throw Error('User not found.');
     }
     return result;

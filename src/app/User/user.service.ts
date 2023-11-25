@@ -5,7 +5,11 @@ import { UserModel } from './user.model';
 const createUserIntoDB = async (userInfo: TUser) => {
   const { userId } = await UserModel.create(userInfo);
   const result = await UserModel.aggregate([
+
+    // Stage 1: Match with specific userId
     { $match: { userId } },
+
+    // Stage 2: Projected for which fields are exclude in response
     {
       $project: {
         _id: 0,
@@ -21,6 +25,11 @@ const createUserIntoDB = async (userInfo: TUser) => {
 // Get all Users from DB Service
 const getAllUsers = async () => {
   const result = UserModel.aggregate([
+
+    // Stage 1: Match the user who is active currently
+    { $match: {isActive: {$ne: false}}},
+
+    // Stage 2: Projected for which fields are include and exclude in response
     {
       $project: {
         _id: 0,
@@ -30,8 +39,11 @@ const getAllUsers = async () => {
         email: 1,
         address: 1,
       },
-    },
+    }
   ]);
+  if((await result).length === 0){
+    throw Error()
+  }
   return result;
 };
 
@@ -51,7 +63,7 @@ const updateUser = async (
 ): Promise<TUser | null> => {
   const result = await UserModel.findOneAndUpdate(
     { userId },
-    { $set: updateData },
+    updateData,
     { new: true },
   );
   if (result === null) {
@@ -87,7 +99,10 @@ const addToOrders = async (userId: number, order: TOrder) => {
 // Retrieve all orders for a specific user Service
 const getUserOrders = async (userId: number) => {
   const result = await UserModel.aggregate([
-    { $match: { userId: { $eq: userId } } },
+    { $match: {$and: [
+      {isActive: {$ne: false}},
+      {userId: { $eq: userId }}
+    ]} },
     {
       $project: {
         _id: 0,
@@ -105,7 +120,8 @@ const getUserOrders = async (userId: number) => {
       },
     },
   ]);
-  if (result === null) {
+
+  if (result === null || result.length === 0) {
     throw Error('User not found.');
   }
   return result;

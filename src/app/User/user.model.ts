@@ -96,8 +96,36 @@ UserSchema.pre('save', async function (next) {
     this.password,
     Number(config.bcrypt_salt_rounds),
   );
-
   next();
+});
+
+// User password is encrypted with bcrypt hash when update user.
+UserSchema.pre('findOneAndUpdate', async function (this: any, next) {
+  try {
+    const update = this.getUpdate();
+    if (update.password) {
+      update.password = await bcrypt.hash(
+        update.password,
+        Number(config.bcrypt_salt_rounds),
+      );
+    }
+  
+    this.find({ isActive: { $ne: false } }).projection({
+      _id: 0,
+      userId: 1,
+      username: 1,
+      fullName: 1,
+      age: 1,
+      email: 1,
+      isActive: 1,
+      hobbies: 1,
+      address: 1,
+    });
+
+    next();
+  } catch (error) {
+    next();
+  }
 });
 
 // When hit "/api/users" route for Find All Users client will get data according bellow filter
@@ -130,25 +158,8 @@ UserSchema.pre(/^findOne/, function (this: Query<TUser, Document>, next) {
   next();
 });
 
-// When hit "/api/users/:userId" route for Update User client will get data according bellow filter
-UserSchema.pre(
-  /^findOneAndUpdate/,
-  function (this: Query<TUser, Document>, next) {
-    this.find({ isActive: { $ne: false } }).projection({
-      _id: 0,
-      userId: 1,
-      username: 1,
-      fullName: 1,
-      age: 1,
-      email: 1,
-      isActive: 1,
-      hobbies: 1,
-      address: 1,
-    });
-    next();
-  },
-);
 
+// This middleware will run when use Update One operation
 UserSchema.pre(/^updateOne/, function (this: Query<TUser, Document>, next) {
   this.find({ isActive: { $ne: false } });
   next();
