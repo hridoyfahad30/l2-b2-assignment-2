@@ -261,7 +261,9 @@ If you hit this route with "userId", the function will calculate automatically t
     Create a `.env` file in the root of your project and add the following:
     
     `MONGODB_URI=mongodb://localhost:27017/your-database-name
-    PORT=3000` 
+    
+PORT=5000
+BCRYPT_SALT_ROUNDS=16` 
     
     Adjust the MongoDB URI and port according to your setup.
     
